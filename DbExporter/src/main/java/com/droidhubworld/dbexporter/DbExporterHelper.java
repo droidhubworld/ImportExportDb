@@ -35,6 +35,24 @@ public class DbExporterHelper {
         exportToCsv();
     }
 
+    public static class Builder {
+        Context mContext;
+        String dbName;
+        String directoryName;
+        ExporterListener listener;
+
+        public Builder(Context mContext, String dbName, String directoryName, ExporterListener listener) {
+            this.dbName = dbName;
+            this.directoryName = directoryName;
+            this.mContext = mContext;
+            this.listener = listener;
+        }
+
+        public DbExporterHelper build() {
+            return new DbExporterHelper(mContext, dbName, directoryName, listener);
+        }
+    }
+
     private void exportToCsv() {
         dbFile = context.getDatabasePath(dbName).getAbsoluteFile();
         database = SQLiteDatabase.openOrCreateDatabase(dbFile, null);
@@ -183,7 +201,7 @@ public class DbExporterHelper {
             //-wal file
             File backupWalDB = new File(externalStorageDirPath, dbName + "-wal");
             FileChannel sourceWal = new FileInputStream(backupWalDB).getChannel();
-            FileChannel destinationWal = new FileOutputStream(appDBDirectory + File.separator + dbName+"-wal").getChannel();
+            FileChannel destinationWal = new FileOutputStream(appDBDirectory + File.separator + dbName + "-wal").getChannel();
             destinationWal.transferFrom(sourceWal, 0, sourceWal.size());
             sourceWal.close();
             destinationWal.close();

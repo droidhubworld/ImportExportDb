@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        exportDbUtil = new DbExporterHelper(this, "sampleDb", "ANAND_DB", this);
+        exportDbUtil = new DbExporterHelper.Builder(this, "sampleDb", "ANAND_DB", this).build();
+        //exportDbUtil = new DbExporterHelper(this, "sampleDb", "ANAND_DB", this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
