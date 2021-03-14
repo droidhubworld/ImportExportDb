@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.library'
 }
-apply plugin: 'maven'
-group = 'com.github.droidhubworld'
+/*apply plugin: 'maven'
+group = 'com.github.droidhubworld'*/
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"

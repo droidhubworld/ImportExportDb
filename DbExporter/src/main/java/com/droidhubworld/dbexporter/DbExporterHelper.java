@@ -18,6 +18,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 public class DbExporterHelper {
+    String prefName;
     String dbName;
     String directoryName;
     Context context;
@@ -27,8 +28,9 @@ public class DbExporterHelper {
     File exportDir;
     ExporterListener listener;
 
-    public DbExporterHelper(Context context, String dbName, String directoryName, ExporterListener listener) {
+    public DbExporterHelper(Context context, String prefName, String dbName, String directoryName, ExporterListener listener) {
         this.dbName = dbName;
+        this.prefName = prefName;
         this.directoryName = directoryName;
         this.context = context;
         this.listener = listener;
@@ -37,11 +39,13 @@ public class DbExporterHelper {
 
     public static class Builder {
         Context mContext;
+        String prefName;
         String dbName;
         String directoryName;
         ExporterListener listener;
 
-        public Builder(Context mContext, String dbName, String directoryName, ExporterListener listener) {
+        public Builder(Context mContext, String prefName, String dbName, String directoryName, ExporterListener listener) {
+            this.prefName = prefName;
             this.dbName = dbName;
             this.directoryName = directoryName;
             this.mContext = mContext;
@@ -49,7 +53,7 @@ public class DbExporterHelper {
         }
 
         public DbExporterHelper build() {
-            return new DbExporterHelper(mContext, dbName, directoryName, listener);
+            return new DbExporterHelper(mContext, prefName, dbName, directoryName, listener);
         }
     }
 
@@ -133,9 +137,10 @@ public class DbExporterHelper {
     }
 
     /**
-     * @param appDBPath = db path of you app. see sample for detail
+     * @param appPath      = db path of you app. see sample for detail
+     * @param isBackupPref = if need to backup pref file
      */
-    public void exportDb(String appDBPath) {
+    public void exportDb(String appPath, boolean isBackupPref) {
         try {
             File externalStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
             if (!externalStorageDir.exists()) {
@@ -144,8 +149,19 @@ public class DbExporterHelper {
             File internalStorageDir = Environment.getDataDirectory();
 //             appDBPath = "/data/com.android.dbexporterlibrary/databases/"    //getDatabasePath(DATABASE_NAME).absolutePath;
 
+            //Pref File
+            if (isBackupPref && prefName != null) {
+                File currentPref = new File(internalStorageDir, appPath + "shared_prefs/" + prefName);
+                File backupPref = new File(externalStorageDir, prefName);
+                FileChannel source = new FileInputStream(currentPref).getChannel();
+                FileChannel destination = new FileOutputStream(backupPref).getChannel();
+                destination.transferFrom(source, 0, source.size());
+                source.close();
+                destination.close();
+            }
+
             //.db file
-            File currentDB = new File(internalStorageDir, appDBPath + dbName);
+            File currentDB = new File(internalStorageDir, appPath + "databases/" + dbName);
             File backupDB = new File(externalStorageDir, dbName);
             FileChannel source = new FileInputStream(currentDB).getChannel();
             FileChannel destination = new FileOutputStream(backupDB).getChannel();
@@ -154,7 +170,7 @@ public class DbExporterHelper {
             destination.close();
 
             //-wal file
-            File currentWalDB = new File(internalStorageDir, appDBPath + dbName + "-wal");
+            File currentWalDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-wal");
             File backupWalDB = new File(externalStorageDir, dbName + "-wal");
             FileChannel sourceWal = new FileInputStream(currentWalDB).getChannel();
             FileChannel destinationWal = new FileOutputStream(backupWalDB).getChannel();
@@ -163,7 +179,7 @@ public class DbExporterHelper {
             destinationWal.close();
 
             //-shm file
-            File currentShmDB = new File(internalStorageDir, appDBPath + dbName + "-shm");
+            File currentShmDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-shm");
             File backupShmDB = new File(externalStorageDir, dbName + "-shm");
             FileChannel sourceShm = new FileInputStream(currentShmDB).getChannel();
             FileChannel destinationShm = new FileOutputStream(backupShmDB).getChannel();
