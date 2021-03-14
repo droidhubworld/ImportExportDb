@@ -1,0 +1,3 @@
+include ':DbExporter'
+include ':app'
+rootProject.name = "ImportExportDb"
