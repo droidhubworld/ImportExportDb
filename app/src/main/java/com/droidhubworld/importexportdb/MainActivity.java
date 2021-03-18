@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
     }
 
     public void importDb(View view) {
-        if (exportDbUtil.isBackupExist("ANAND_DB")) {
+        if (exportDbUtil.isBackupExist(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ANAND_DB")) {
             exportDbUtil.importDBFile("/data/com.droidhubworld.importexportdb/databases/");
         } else {
             Toast.makeText(this, "no Backup", Toast.LENGTH_SHORT).show();
