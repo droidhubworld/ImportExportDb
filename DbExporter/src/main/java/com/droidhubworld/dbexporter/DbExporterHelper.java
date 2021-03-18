@@ -239,9 +239,9 @@ public class DbExporterHelper {
     /**
      * @param dirName = directory name where tou want to check db exist or not
      */
-    public Boolean isBackupExist(String dirName) {
-        String externalStorageDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + dirName;
-        File backupDB = new File(externalStorageDirPath, dbName);
+    public Boolean isBackupExist(String dirLocation) {
+//         String externalStorageDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + dirName;
+        File backupDB = new File(dirLocation, dbName);
         return backupDB.exists();
     }
 }
