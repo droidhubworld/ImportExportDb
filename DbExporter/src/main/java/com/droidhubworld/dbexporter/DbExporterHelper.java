@@ -209,7 +209,7 @@ public class DbExporterHelper {
             //.db file
             File backupDB = new File(externalStorageDirPath, dbName);
             FileChannel source = new FileInputStream(backupDB).getChannel();
-            FileChannel destination = new FileOutputStream(appDBDirectory + File.separator + "dbName").getChannel();
+            FileChannel destination = new FileOutputStream(appDBDirectory + File.separator + dbName).getChannel();
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
