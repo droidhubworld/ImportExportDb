@@ -142,9 +142,19 @@ public class DbExporterHelper {
      */
     public void exportDb(String appPath, boolean isBackupPref) {
         try {
-            File externalStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
-            if (!externalStorageDir.exists()) {
-                externalStorageDir.mkdirs();
+            File externalStorageDir;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                File path = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DOWNLOADS);
+                externalStorageDir = new File(path, directoryName);
+                if (!externalStorageDir.exists()) {
+                    externalStorageDir.mkdirs();
+                }
+            } else {
+                externalStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
+                if (!externalStorageDir.exists()) {
+                    externalStorageDir.mkdirs();
+                }
             }
             File internalStorageDir = Environment.getDataDirectory();
 //             appDBPath = "/data/com.android.dbexporterlibrary/databases/"    //getDatabasePath(DATABASE_NAME).absolutePath;
