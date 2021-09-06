@@ -190,6 +190,7 @@ public class DbExporterHelper {
                 sourceWal.close();
                 destinationWal.close();
             }
+
             //-shm file
             File currentShmDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-shm");
             if (currentShmDB.exists()) {
