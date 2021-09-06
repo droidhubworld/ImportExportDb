@@ -16,3 +16,9 @@ allprojects {
 dependencies {
         implementation 'com.github.droidhubworld:ImportExportDb:0.0.1'
 }
+
+```
+ ###### Step 2. Export DB
+ ```
+DbExporterHelper exportDbUtil = new DbExporterHelper.Builder(getActivity(), SHARED_PREF_NAME + ".xml", backupFolderPath, this).build();
+exportDbUtil.exportDb("/data/{your packeg name}/", true);
