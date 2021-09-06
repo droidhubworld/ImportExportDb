@@ -18,7 +18,7 @@ dependencies {
 }
 
 ```
- ###### Step 2. Export DB
+ ###### Step 3. Export DB
  ```
 DbExporterHelper exportDbUtil = new DbExporterHelper.Builder(getActivity(), SHARED_PREF_NAME + ".xml", backupFolderPath, this).build();
 exportDbUtil.exportDb("/data/{your packeg name}/", true);
