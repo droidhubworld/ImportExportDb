@@ -182,22 +182,25 @@ public class DbExporterHelper {
 
             //-wal file
             File currentWalDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-wal");
-            File backupWalDB = new File(externalStorageDir, dbName + "-wal");
-            FileChannel sourceWal = new FileInputStream(currentWalDB).getChannel();
-            FileChannel destinationWal = new FileOutputStream(backupWalDB).getChannel();
-            destinationWal.transferFrom(sourceWal, 0, sourceWal.size());
-            sourceWal.close();
-            destinationWal.close();
-
+            if (currentWalDB.exists()) {
+                File backupWalDB = new File(externalStorageDir, dbName + "-wal");
+                FileChannel sourceWal = new FileInputStream(currentWalDB).getChannel();
+                FileChannel destinationWal = new FileOutputStream(backupWalDB).getChannel();
+                destinationWal.transferFrom(sourceWal, 0, sourceWal.size());
+                sourceWal.close();
+                destinationWal.close();
+            }
             //-shm file
             File currentShmDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-shm");
-            File backupShmDB = new File(externalStorageDir, dbName + "-shm");
-            FileChannel sourceShm = new FileInputStream(currentShmDB).getChannel();
-            FileChannel destinationShm = new FileOutputStream(backupShmDB).getChannel();
-            destinationShm.transferFrom(sourceShm, 0, sourceShm.size());
-            sourceShm.close();
-            destinationShm.close();
-            listener.success("DB successfully Exported");
+            if (currentShmDB.exists()) {
+                File backupShmDB = new File(externalStorageDir, dbName + "-shm");
+                FileChannel sourceShm = new FileInputStream(currentShmDB).getChannel();
+                FileChannel destinationShm = new FileOutputStream(backupShmDB).getChannel();
+                destinationShm.transferFrom(sourceShm, 0, sourceShm.size());
+                sourceShm.close();
+                destinationShm.close();
+            }
+            listener.success("DB successfully Exported : " + currentDB.getAbsolutePath());
         } catch (Exception e) {
             listener.fail("Export DB fail", e.getLocalizedMessage());
         }
