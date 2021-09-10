@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
     }
 
     public void exportDB(View view) {
-        exportDbUtil.exportDbToZip("/data/com.droidhubworld.importexportdb/", "abc.zip", false);
+        exportDbUtil.exportToZip("/data/com.droidhubworld.importexportdb/", "abc.zip", false);
     }
 
     public void checkData(View view) {

@@ -214,7 +214,7 @@ public class DbExporterHelper {
         }
     }
 
-    public void exportDbToZip(String appPath, String zipFilePath, boolean isBackupPref) {
+    public void exportToZip(String appPath, String zipFilePath, boolean isBackupPref) {
         try {
             File externalStorageDir;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
