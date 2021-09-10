@@ -22,3 +22,9 @@ dependencies {
  ```
 DbExporterHelper exportDbUtil = new DbExporterHelper.Builder(getActivity(), SHARED_PREF_NAME + ".xml", backupFolderPath, this).build();
 exportDbUtil.exportDb("/data/{your packeg name}/", true);
+
+```
+ ###### Export To Zip
+ ```
+DbExporterHelper exportDbUtil = new DbExporterHelper.Builder(getActivity(), SHARED_PREF_NAME + ".xml", backupFolderPath, this).build();
+exportDbUtil.exportToZip("/data/{your packeg name}/", {ZIP FILE NAME}, true);
