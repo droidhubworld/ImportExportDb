@@ -5,11 +5,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.opencsv.CSVWriter;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,6 +20,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class DbExporterHelper {
     String prefName;
@@ -28,6 +34,7 @@ public class DbExporterHelper {
     ArrayList<String> tables;
     File exportDir;
     ExporterListener listener;
+    private static final int BUFFER = 2048;
 
     public DbExporterHelper(Context context, String prefName, String dbName, String directoryName, ExporterListener listener) {
         this.dbName = dbName;
@@ -207,6 +214,86 @@ public class DbExporterHelper {
         }
     }
 
+    public void exportDbToZip(String appPath, String zipFilePath, boolean isBackupPref) {
+        try {
+            File externalStorageDir;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                File path = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DOWNLOADS);
+                externalStorageDir = new File(path, directoryName);
+                if (!externalStorageDir.exists()) {
+                    externalStorageDir.mkdirs();
+                }
+            } else {
+                externalStorageDir = new File(Environment.getExternalStorageDirectory(), directoryName);
+                if (!externalStorageDir.exists()) {
+                    externalStorageDir.mkdirs();
+                }
+            }
+            File internalStorageDir = Environment.getDataDirectory();
+//             appDBPath = "/data/com.android.dbexporterlibrary/databases/"    //getDatabasePath(DATABASE_NAME).absolutePath;
+            ArrayList<String> _files = new ArrayList();
+
+            //Pref File
+            if (isBackupPref && prefName != null) {
+                File currentPref = new File(internalStorageDir, appPath + "shared_prefs/" + prefName);
+                _files.add(currentPref.getAbsolutePath());
+            }
+
+            //.db file
+            File currentDB = new File(internalStorageDir, appPath + "databases/" + dbName);
+            _files.add(currentDB.getAbsolutePath());
+
+            //-wal file
+            File currentWalDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-wal");
+            if (currentWalDB.exists()) {
+                _files.add(currentWalDB.getAbsolutePath());
+            }
+
+            //-shm file
+            File currentShmDB = new File(internalStorageDir, appPath + "databases/" + dbName + "-shm");
+            if (currentShmDB.exists()) {
+                _files.add(currentShmDB.getAbsolutePath());
+            }
+
+
+            /*
+             * Zip Creation
+             * */
+            File zipFile = new File(externalStorageDir, (zipFilePath.contains(".zip")) ? zipFilePath : zipFilePath + ".zip");
+            BufferedInputStream origin = null;
+
+            FileOutputStream dest = new FileOutputStream(zipFile);
+
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+
+            byte data[] = new byte[BUFFER];
+
+            for (int i = 0; i < _files.size(); i++) {
+                Log.v("Compress", "Adding: " + _files.get(i));
+                FileInputStream fi = new FileInputStream(_files.get(i));
+                origin = new BufferedInputStream(fi, BUFFER);
+                ZipEntry entry = new ZipEntry(_files.get(i).substring(_files.get(i).lastIndexOf("/") + 1));
+                out.putNextEntry(entry);
+                int count;
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+
+            out.close();
+            /*
+             * Zip Creation end
+             * */
+
+
+            listener.success("DB successfully Exported : " + currentDB.getAbsolutePath());
+        } catch (Exception e) {
+            listener.fail("Export DB fail", e.getLocalizedMessage());
+        }
+    }
+
     /**
      * @param appDBPath = db path of you app. see sample for detail
      */
@@ -252,7 +339,7 @@ public class DbExporterHelper {
     }
 
     /**
-     * @param dirName = directory name where tou want to check db exist or not
+     * @param dirLocation = directory name where tou want to check db exist or not
      */
     public Boolean isBackupExist(String dirLocation) {
 //         String externalStorageDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + dirName;

@@ -1,6 +1,7 @@
 package com.droidhubworld.importexportdb;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         exportDbUtil = new DbExporterHelper.Builder(this, null, "sampleDb", "ANAND_DB", this).build();
-                //exportDbUtil = new DbExporterHelper(this, "sampleDb", "ANAND_DB", this);
+        //exportDbUtil = new DbExporterHelper(this, "sampleDb", "ANAND_DB", this);
 
-                FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
     }
 
     public void exportDB(View view) {
-        exportDbUtil.exportDb("/data/com.droidhubworld.importexportdb/", false);
+        exportDbUtil.exportDbToZip("/data/com.droidhubworld.importexportdb/", "abc.zip", false);
     }
 
     public void checkData(View view) {
