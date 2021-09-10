@@ -14,7 +14,7 @@ allprojects {
  ###### Step 2. Add the dependency
  ```
 dependencies {
-        implementation 'com.github.droidhubworld:ImportExportDb:0.0.1'
+        implementation 'com.github.droidhubworld:ImportExportDb:v1.2.0'
 }
 
 ```
