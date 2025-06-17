@@ -34,13 +34,8 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
         //exportDbUtil = new DbExporterHelper(this, "sampleDb", "ANAND_DB", this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
     }
 
     @Override
@@ -66,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
 
     @Override
     public void success(String s) {
+        Log.e("TAG","FILE PATH : "+s);
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
@@ -96,13 +92,10 @@ public class MainActivity extends AppCompatActivity implements ExporterListener 
 
     public void checkData(View view) {
         FirstTableRepo firstTableRepo = new FirstTableRepo(getApplication());
-        firstTableRepo.getAllSystemData().observe(this, new Observer<List<FirstTable>>() {
-            @Override
-            public void onChanged(List<FirstTable> firstTables) {
-                Log.e("Firest Table Data :", ">>>> " + firstTables.size());
-                for (FirstTable table : firstTables) {
-                    Log.e("Firest Table Data :", table.getName());
-                }
+        firstTableRepo.getAllSystemData().observe(this, firstTables -> {
+            Log.e("Firest Table Data :", ">>>> " + firstTables.size());
+            for (FirstTable table : firstTables) {
+                Log.e("Firest Table Data :", table.getName());
             }
         });
     }

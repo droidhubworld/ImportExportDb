@@ -1,22 +1,19 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 /*apply plugin: 'maven'
 group = 'com.github.droidhubworld'*/
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
-
+    compileSdk 35
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 21
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-
+    namespace 'com.droidhubworld.dbexporter'
     buildTypes {
         release {
             minifyEnabled false
@@ -24,17 +21,29 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     // https://mvnrepository.com/artifact/com.opencsv/opencsv
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
 
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+//                from components.release
+                groupId = 'com.droidhubworld.dbexporter'
+                artifactId = 'dbexporter'
+                version = 'v1.2.1'
+            }
+        }
+    }
 }
