@@ -39,11 +39,27 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-//                from components.release
+                from components.findByName('release')
                 groupId = 'com.droidhubworld.dbexporter'
                 artifactId = 'dbexporter'
-                version = '1.2.02'
+                version = '1.2.03'
             }
         }
     }
+
 }
+
+/*
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.droidhubworld.dbexporter'
+            artifactId = 'dbexporter'
+            version = '1.2.03'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}*/
