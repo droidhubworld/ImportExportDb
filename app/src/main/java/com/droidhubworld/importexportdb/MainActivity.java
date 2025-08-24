@@ -19,8 +19,6 @@ import com.droidhubworld.importexportdb.db.repo.FirstTableRepo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements ExporterListener {
     private DbExporterHelper exportDbUtil;
 
