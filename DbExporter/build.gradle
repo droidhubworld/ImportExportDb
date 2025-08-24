@@ -42,7 +42,7 @@ afterEvaluate {
                 from components.findByName('release')
                 groupId = 'com.droidhubworld.dbexporter'
                 artifactId = 'dbexporter'
-                version = '1.2.03'
+                version = 'v2.1.01'
             }
         }
     }
