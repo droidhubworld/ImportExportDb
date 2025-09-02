@@ -37,19 +37,19 @@ dependencies {
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.12.0'
 
 }
-/*afterEvaluate {
+afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
                 from components.findByName('release')
                 groupId = 'com.droidhubworld.dbexporter'
                 artifactId = 'dbexporter'
-                version = '2.1.01'
+                version = 'v2.1.04'
             }
         }
     }
 
-}*/
+}
 
 /*
 publishing {
