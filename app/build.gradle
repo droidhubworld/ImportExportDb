@@ -36,7 +36,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.9.3'
     implementation 'androidx.navigation:navigation-ui:2.9.3'
     implementation project(path: ':DbExporter')
-//    implementation 'com.github.droidhubworld:ImportExportDb:v2.1.0'
+//    implementation 'com.github.droidhubworld:ImportExportDb:2.1.01'
     implementation 'com.github.droidhubworld:CrashLogger:v2.0.19'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
